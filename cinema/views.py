@@ -11,6 +11,7 @@ from cinema.serializers import (
     CinemaHallSerializer
 )
 
+
 @api_view(["GET", "POST"])
 def movie_list(request):
     if request.method == "GET":
@@ -24,6 +25,7 @@ def movie_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["GET", "PUT", "DELETE"])
 def movie_detail(request, pk):
@@ -44,6 +46,7 @@ def movie_detail(request, pk):
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class GenreList(APIView):
     def get(self, request):
         genres = Genre.objects.all()
@@ -56,6 +59,7 @@ class GenreList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class GenreDetail(APIView):
     def get_object(self, pk):
@@ -87,13 +91,16 @@ class GenreDetail(APIView):
         genre.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class ActorList(generics.ListCreateAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
 
+
 class ActorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
+
 
 class CinemaHallViewSet(
     mixins.ListModelMixin,
@@ -105,6 +112,7 @@ class CinemaHallViewSet(
 ):
     queryset = CinemaHall.objects.all()
     serializer_class = CinemaHallSerializer
+
 
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()

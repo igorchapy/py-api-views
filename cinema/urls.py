@@ -1,48 +1,35 @@
-from django.urls import path, include
-from rest_framework import routers
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
 from cinema.views import (
-    GenreList,
-    GenreDetail,
-    ActorList,
     ActorDetail,
+    ActorList,
     CinemaHallViewSet,
-    MovieViewSet
+    GenreDetail,
+    GenreList,
+    MovieViewSet,
+    movie_detail,
+    movie_list,
 )
 
-
-cinemahall_list = CinemaHallViewSet.as_view(
-    actions={"get": "list", "post": "create"}
-)
-
-cinemahall_detail = CinemaHallViewSet.as_view(
-    actions={
-        "get": "retrieve",
-        "put": "update",
-        "patch": "partial_update",
-        "delete": "destroy"
-    }
-)
-
-router = routers.DefaultRouter()
-router.register("movies", MovieViewSet)
-
-from cinema.views import movie_list, movie_detail
+router = DefaultRouter()
+router.register(r"movies", MovieViewSet, basename="movie")
+router.register(r"cinema-halls", CinemaHallViewSet, basename="cinema-hall")
 
 urlpatterns = [
-    path("movies/", movie_list, name="movie-list"),
-    path("movies/<int:pk>/", movie_detail, name="movie-detail"),
+    # ——— функціональні в’юхи для Movie (залишив, якщо вони потрібні для навчання) ———
+    path("movies-func/", movie_list, name="movie-list-func"),
+    path("movies-func/<int:pk>/", movie_detail, name="movie-detail-func"),
+
+    # ——— класові/генеричні в’юхи ———
     path("genres/", GenreList.as_view(), name="genre-list"),
     path("genres/<int:pk>/", GenreDetail.as_view(), name="genre-detail"),
+
     path("actors/", ActorList.as_view(), name="actor-list"),
     path("actors/<int:pk>/", ActorDetail.as_view(), name="actor-detail"),
-    path("cinema_halls/", cinemahall_list, name="cinema_hall-list"),
-    path(
-        "cinema_halls/<int:pk>/",
-        cinemahall_detail,
-        name="cinema_hall-detail"
-    ),
-    path("", include(router.urls))
+
+    # ——— ViewSet-и (Movies, CinemaHalls) ———
+    path("", include(router.urls)),
 ]
 
 app_name = "cinema"
