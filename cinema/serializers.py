@@ -92,4 +92,3 @@ class MovieSerializer(serializers.Serializer):
         if "genres" in validated_data:
             instance.genres.set(validated_data["genres"])
             return instance
-

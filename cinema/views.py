@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework import status, generics, viewsets, mixins
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-
 from cinema.models import Movie, Genre, Actor, CinemaHall
 from cinema.serializers import (
     MovieSerializer,
@@ -11,8 +10,6 @@ from cinema.serializers import (
     ActorSerializer,
     CinemaHallSerializer
 )
-
-# ---------- MOVIES ----------
 
 @api_view(["GET", "POST"])
 def movie_list(request):
@@ -27,7 +24,6 @@ def movie_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(["GET", "PUT", "DELETE"])
 def movie_detail(request, pk):
@@ -48,8 +44,6 @@ def movie_detail(request, pk):
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# ---------- GENRES ----------
-
 class GenreList(APIView):
     def get(self, request):
         genres = Genre.objects.all()
@@ -62,7 +56,6 @@ class GenreList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class GenreDetail(APIView):
     def get_object(self, pk):
@@ -94,18 +87,13 @@ class GenreDetail(APIView):
         genre.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# ---------- ACTORS ----------
-
 class ActorList(generics.ListCreateAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
 
-
 class ActorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
-
-# ---------- CINEMA HALLS ----------
 
 class CinemaHallViewSet(
     mixins.ListModelMixin,
@@ -117,8 +105,6 @@ class CinemaHallViewSet(
 ):
     queryset = CinemaHall.objects.all()
     serializer_class = CinemaHallSerializer
-
-# ---------- MOVIE VIEWSET ----------
 
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
