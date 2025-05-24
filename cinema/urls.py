@@ -17,7 +17,6 @@ router.register(r"movies", MovieViewSet, basename="movie")
 router.register(r"cinema-halls", CinemaHallViewSet, basename="cinema-hall")
 
 urlpatterns = [
-    # ——— функціональні в’юхи для Movie (залишив, якщо вони потрібні для навчання) ———
     path("movies-func/", movie_list, name="movie-list-func"),
     path("movies-func/<int:pk>/", movie_detail, name="movie-detail-func"),
 
